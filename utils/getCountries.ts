@@ -1,11 +1,11 @@
 import axios from 'axios';
 
-export async function GET(request: Request) {
+export default async function getCountries() {
   try {
     const { data } = await axios.get('https://restcountries.com/v3.1/all');
-    
-    return new Response(data);
+
+    return data;
   } catch (error: any) {
-    return new Response(error.message);
+    return error?.message;
   }
 }
