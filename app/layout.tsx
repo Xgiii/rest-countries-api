@@ -11,7 +11,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en'>
-      <body className='bg-slate-100 dark:bg-slate-800 dark:text-white'>
+      <body className='bg-slate-100 dark:bg-slate-900 dark:text-white'>
         <ThemeProvider attribute='class' enableSystem={false}>
           <MainHeader />
           <main>{children}</main>

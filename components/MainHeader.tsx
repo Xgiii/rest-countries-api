@@ -15,7 +15,7 @@ function MainHeader() {
   }, []);
 
   return (
-    <header className='flex justify-between items-center bg-white dark:bg-slate-700 shadow-md py-6 px-6 md:px-24'>
+    <header className='flex justify-between items-center bg-white dark:bg-slate-800 shadow-md py-6 px-6 md:px-24'>
       <h1 className='text-2xl font-bold'>Where in the world?</h1>
       {theme === 'light' && mounted && (
         <div
