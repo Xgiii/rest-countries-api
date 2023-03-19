@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { Countries } from './interfaces';
 
 export default async function getCountries() {
   try {
