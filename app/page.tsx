@@ -7,6 +7,7 @@ import {
   ChevronDownIcon,
 } from '@heroicons/react/24/outline';
 import axios from 'axios';
+import { useEffect, useState } from 'react';
 import useSwr from 'swr';
 
 const fetcher = async (url: string) =>
@@ -28,23 +29,40 @@ const options = [
 export default function Home() {
   const { data, isLoading, error } = useSwr('/api/countries', fetcher);
 
+  const [searchedCountry, setSearchedCountry] = useState('');
+  const [countries, setCountries] = useState<Countries[]>();
+
+  useEffect(() => {
+    setCountries(data?.countries);
+  }, [data]);
+
+  function searchHandler(e: React.ChangeEvent<HTMLInputElement>) {
+    setSearchedCountry(e.target.value);
+    const filteredCountries = data?.countries.filter((country: Countries) =>
+      country.name.common.toLowerCase().includes(e.target.value)
+    );
+    setCountries(filteredCountries);
+  }
+
   if (error)
     return (
       <p className='font-bold text-red-500 text-center mt-8 text-xl'>{error}</p>
     );
 
   return (
-    <div className='px-6 md:px-24 mt-16'>
-      <div className='flex items-center justify-between'>
-        <div className='flex items-center px-6 space-x-6 w-[35vw] rounded-md shadow-md h-14 bg-white dark:bg-slate-800'>
+    <div className='px-6 md:px-24 mt-8 md:mt-16'>
+      <div className='flex flex-col space-y-10 md:space-y-0 md:flex-row items-center justify-between'>
+        <div className='flex items-center px-6 space-x-6 w-full md:w-[35vw] rounded-md shadow-md h-14 bg-white dark:bg-slate-800'>
           <MagnifyingGlassIcon className='h-6 w-6' />
           <input
             type='text'
+            value={searchedCountry}
+            onChange={searchHandler}
             placeholder='Search for a country...'
             className='bg-transparent outline-none'
           />
         </div>
-        <div className='flex items-center justify-between space-x-12 px-4 h-14 bg-white text-slate-500 dark:text-slate-300 dark:bg-slate-800 shadow-md rounded-md'>
+        <div className='flex self-start md:self-auto items-center justify-between space-x-12 px-4 h-14 bg-white text-slate-500 dark:text-slate-300 dark:bg-slate-800 shadow-md rounded-md'>
           <p>Filter by Region</p>
           <ChevronDownIcon className='w-6 h-6' />
         </div>
@@ -54,8 +72,8 @@ export default function Home() {
           Loading...
         </p>
       ) : (
-        <section className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-24 my-16'>
-          {data.countries?.map((country: Countries) => (
+        <section className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-24 my-12'>
+          {countries?.map((country: Countries) => (
             <CountryCard country={country} key={country.name.common} />
           ))}
         </section>
