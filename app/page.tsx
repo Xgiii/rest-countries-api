@@ -20,7 +20,7 @@ const fetcher = async (url: string) =>
 
 const options = [
   { value: 'africa', label: 'Africa' },
-  { value: 'america', label: 'America' },
+  { value: 'americas', label: 'Americas' },
   { value: 'asia', label: 'Asia' },
   { value: 'europe', label: 'Europe' },
   { value: 'oceania', label: 'Oceania' },
@@ -31,6 +31,8 @@ export default function Home() {
 
   const [searchedCountry, setSearchedCountry] = useState('');
   const [countries, setCountries] = useState<Countries[]>();
+  const [filterRegionDropdown, setFilterRegionDropdown] = useState(false);
+  const [region, setRegion] = useState('');
 
   useEffect(() => {
     setCountries(data?.countries);
@@ -39,9 +41,23 @@ export default function Home() {
   function searchHandler(e: React.ChangeEvent<HTMLInputElement>) {
     setSearchedCountry(e.target.value);
     const filteredCountries = data?.countries.filter((country: Countries) =>
-      country.name.common.toLowerCase().includes(e.target.value)
+      country.name.common.toLowerCase().includes(e.target.value) && region
+        ? country.region === region
+        : null
     );
     setCountries(filteredCountries);
+  }
+
+  function filterByRegionHandler(region: string) {
+    setRegion(region);
+
+    const filteredCountries = data?.countries.filter(
+      (country: Countries) => country.region === region
+    );
+    setCountries(filteredCountries);
+
+    setFilterRegionDropdown(true);
+    // it sets dropdown to true and other handler set this to opposite value so in the end its false. Hacky :)
   }
 
   if (error)
@@ -59,12 +75,27 @@ export default function Home() {
             value={searchedCountry}
             onChange={searchHandler}
             placeholder='Search for a country...'
-            className='bg-transparent outline-none'
+            className='bg-transparent outline-none w-full'
           />
         </div>
-        <div className='flex self-start md:self-auto items-center justify-between space-x-12 px-4 h-14 bg-white text-slate-500 dark:text-slate-300 dark:bg-slate-800 shadow-md rounded-md'>
-          <p>Filter by Region</p>
+        <div
+          onClick={() => setFilterRegionDropdown((prevState) => !prevState)}
+          className='flex self-start md:self-auto items-center justify-between px-8 h-14 bg-white text-slate-500 dark:text-slate-300 dark:bg-slate-800 shadow-md rounded-md cursor-pointer relative'
+        >
+          <p className='mr-12'>Filter by Region</p>
           <ChevronDownIcon className='w-6 h-6' />
+          {filterRegionDropdown && (
+            <div className='absolute w-full px-8 py-4 space-y-2 bg-white dark:bg-slate-800 top-16 left-0 z-10 rounded-md'>
+              {options.map((region) => (
+                <p
+                  onClick={() => filterByRegionHandler(region.label)}
+                  key={region.value}
+                >
+                  {region.label}
+                </p>
+              ))}
+            </div>
+          )}
         </div>
       </div>
       {isLoading ? (
