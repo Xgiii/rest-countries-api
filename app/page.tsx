@@ -43,7 +43,7 @@ export default function Home() {
     const filteredCountries = data?.countries.filter((country: Countries) =>
       country.name.common.toLowerCase().includes(e.target.value) && region
         ? country.region === region
-        : null
+        : country.name.common.toLowerCase().includes(e.target.value)
     );
     setCountries(filteredCountries);
   }
