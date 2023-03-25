@@ -1,22 +1,14 @@
 'use client';
 
 import CountryCard from '@/components/CountryCard';
+import { fetcher } from '@/utils/api';
 import { Countries } from '@/utils/interfaces';
 import {
   MagnifyingGlassIcon,
   ChevronDownIcon,
 } from '@heroicons/react/24/outline';
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import useSwr from 'swr';
-
-const fetcher = async (url: string) =>
-  await axios
-    .get(url)
-    .then((res) => res.data)
-    .catch((error) => {
-      if (error.response.status !== 409) throw error;
-    });
 
 const options = [
   { value: 'africa', label: 'Africa' },
@@ -39,12 +31,14 @@ export default function Home() {
   }, [data]);
 
   function searchHandler(e: React.ChangeEvent<HTMLInputElement>) {
-    setSearchedCountry(e.target.value);
+    const searchedValue = e.target.value.toLowerCase();
+    setSearchedCountry(searchedValue);
+    setRegion('');
+
     const filteredCountries = data?.countries.filter((country: Countries) =>
-      country.name.common.toLowerCase().includes(e.target.value) && region
-        ? country.region === region
-        : country.name.common.toLowerCase().includes(e.target.value)
+      country.name.common.toLowerCase().includes(searchedValue)
     );
+
     setCountries(filteredCountries);
   }
 

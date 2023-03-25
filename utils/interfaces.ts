@@ -7,6 +7,7 @@ export interface Countries {
   independent: boolean;
   status: string;
   unMember: boolean;
+  borders: string[];
   currencies: Currencies;
   idd: Idd;
   capital: string[];

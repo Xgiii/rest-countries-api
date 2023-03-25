@@ -1,4 +1,4 @@
-import getCountries from '@/utils/getCountries';
+import { getCountries } from '@/utils/api';
 import { NextResponse } from 'next/server';
 
 export async function GET(request: Request) {

@@ -1,13 +1,18 @@
+'use client'
+
 import { Countries } from '@/utils/interfaces';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 
 function CountryCard({ country }: { country: Countries }) {
+  const router = useRouter()
+
   return (
-    <div className='flex flex-col shadow-md'>
+    <div onClick={() => router.push(`/${country.name.common}`)} className='flex flex-col shadow-md cursor-pointer'>
       <div className='relative w-full aspect-video rounded-t-md overflow-hidden'>
         <Image
-          src={country.flags.png}
+          src={country.flags.svg}
           alt={`${country.name.common} flag`}
           fill
           className='object-cover'
