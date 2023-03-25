@@ -100,14 +100,20 @@ function CountryPage({ params }: { params: { country: string } }) {
           </div>
           <div className='flex flex-wrap items-center'>
             Border Countries:{' '}
-            {country.borders.map((border) => (
-              <div
-                key={border}
-                className='text-sm bg-white dark:bg-slate-800 font-bold text-gray-600 dark:text-gray-300 px-4 py-2 mr-2 my-2 first:ml-2'
-              >
-                {border}
-              </div>
-            ))}
+            {country.borders ? (
+              country.borders.map((border) => (
+                <div
+                  key={border}
+                  className='text-sm bg-white dark:bg-slate-800 font-bold text-gray-600 dark:text-gray-300 px-4 py-2 mr-2 my-2 first:ml-2'
+                >
+                  {border}
+                </div>
+              ))
+            ) : (
+              <p className='font-bold text-gray-600 dark:text-gray-300 ml-2'>
+                This country has no borders.
+              </p>
+            )}
           </div>
         </div>
       </div>
